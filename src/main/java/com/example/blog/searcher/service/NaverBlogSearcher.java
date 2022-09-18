@@ -5,6 +5,10 @@ import com.example.blog.common.exception.ErrorCode;
 import com.example.blog.searcher.domain.Sort;
 import com.example.blog.searcher.model.BlogResponse;
 import com.example.blog.searcher.model.BlogSearchRequest;
+import com.example.blog.searcher.model.NaverResponseModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
@@ -22,7 +26,9 @@ import java.util.Map;
 @Component
 @Order(value = 2)
 @Slf4j
+@RequiredArgsConstructor
 public class NaverBlogSearcher implements BlogSearcher{
+    private final ObjectMapper objectMapper;
 
     @Value("${search.blog.naver.url}")
     private String apiUrl;
@@ -40,8 +46,13 @@ public class NaverBlogSearcher implements BlogSearcher{
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = get(apiURL, requestHeaders);
-
-        System.out.println(responseBody);
+        NaverResponseModel naverResponseModel;
+        try {
+            naverResponseModel = objectMapper.readValue(responseBody, NaverResponseModel.class);
+        } catch (JsonProcessingException e) {
+            throw new BusinessException(e, ErrorCode.FAIL_INTEGRATION);
+        }
+        System.out.println(naverResponseModel);
         return null;
     }
 
@@ -50,7 +61,7 @@ public class NaverBlogSearcher implements BlogSearcher{
         try {
             query = URLEncoder.encode(model.getKeyword(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new BusinessException(ErrorCode.UNSUPPORTED_ENCODING_EXCEPTION);
+            throw new BusinessException(e, ErrorCode.UNSUPPORTED_ENCODING_EXCEPTION);
         }
         String display = model.getSize().toString();
         String start = model.getPage().toString();

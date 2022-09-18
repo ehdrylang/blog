@@ -14,7 +14,8 @@ public enum ErrorCode {
 
     // Search
     NO_SEARCH_SYSTEM_EXCEPTION(500, "S001", "Search system is not available"),
-    UNSUPPORTED_ENCODING_EXCEPTION(500, "S002", "Unsupported Encoding Exception");
+    UNSUPPORTED_ENCODING_EXCEPTION(500, "S002", "Unsupported Encoding Exception"),
+    FAIL_INTEGRATION(500, "S003", "Fail integration");
 
     private final String code;
     private final String message;
