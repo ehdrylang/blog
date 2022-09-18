@@ -1,5 +1,6 @@
 package com.example.blog.common.exception;
 
+import com.example.blog.searcher.exception.UnsupportedEncodingException;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
@@ -9,7 +10,11 @@ public enum ErrorCode {
     // Common
     INVALID_INPUT_VALUE(400, "C001", " Invalid Input Value"),
     INTERNAL_SERVER_ERROR(500, "C002", "Server Error"),
-    INVALID_TYPE_VALUE(400, "C003", " Invalid Type Value");
+    INVALID_TYPE_VALUE(400, "C003", " Invalid Type Value"),
+
+    // Search
+    NO_SEARCH_SYSTEM_EXCEPTION(500, "S001", "Search system is not available"),
+    UNSUPPORTED_ENCODING_EXCEPTION(500, "S002", "Unsupported Encoding Exception");
 
     private final String code;
     private final String message;

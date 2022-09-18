@@ -5,3 +5,13 @@ spring:
   h2:
     console:
       enabled: true
+
+search:
+  blog:
+    naver:
+      url: 'https://openapi.naver.com/v1/search/blog.json'
+      clientId: 'lN5tBmT2HdJFA5dwdzOt'
+      clientSecret: 'hvfKjy96ka'
+    kakao:
+      url: 'https://dapi.kakao.com/v2/search/blog'
+      apiKey: 'apiKeyddddd'
