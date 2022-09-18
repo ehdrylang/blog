@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * javax.validation.Valid or @Validated 으로 유효성 검사에서 유효하지 않다고 판단되었을 때 발생
+     * @RequestParam 에서 javax.validation.Valid or @Validated 으로 유효성 검사에서 유효하지 않다고 판단되었을 때 발생
      */
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
