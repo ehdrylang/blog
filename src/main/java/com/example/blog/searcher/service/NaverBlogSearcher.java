@@ -127,6 +127,6 @@ public class NaverBlogSearcher implements BlogSearcher{
 
     @Override
     public boolean isAvailable() {
-        return true;
+        return false;
     }
 }

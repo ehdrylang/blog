@@ -8,7 +8,6 @@ import com.example.blog.searcher.model.kakao.KakaoResponseModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -21,7 +20,6 @@ public class KakaoBlogSearcher implements BlogSearcher{
     private final WebClient kakaoWebClient;
 
     @Override
-    @Async
     public BlogResponse search(BlogSearchRequest model) {
         Mono<KakaoResponseModel> mono = kakaoWebClient.get()
                 .uri(createQueryString(model))
@@ -31,7 +29,6 @@ public class KakaoBlogSearcher implements BlogSearcher{
                     throw new ThirdPartyException(e, ErrorCode.THIRD_PARTY_ERROR);
                 });
         KakaoResponseModel kakaoResponseModel = mono.block();
-        log.info(kakaoResponseModel.toString());
         return kakaoResponseModel.toBlogResponse();
     }
     public String createQueryString(BlogSearchRequest model) {
@@ -49,6 +46,6 @@ public class KakaoBlogSearcher implements BlogSearcher{
 
     @Override
     public boolean isAvailable() {
-        return false;
+        return true;
     }
 }

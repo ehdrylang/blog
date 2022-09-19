@@ -27,7 +27,6 @@ public class BlogSearchController {
     @GetMapping("")
     public ResponseEntity<BlogResponse> search(@Validated BlogSearchRequest blogSearchRequest) {
         BlogResponse response = blogSearchService.search(blogSearchRequest);
-        log.info("controller !!! {}", response);
         return ResponseEntity.ok(response);
     }
 
