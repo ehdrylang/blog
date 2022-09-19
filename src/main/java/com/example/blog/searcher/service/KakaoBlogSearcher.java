@@ -1,22 +1,17 @@
 package com.example.blog.searcher.service;
 
+import com.example.blog.common.exception.ErrorCode;
+import com.example.blog.searcher.exception.ThirdPartyException;
 import com.example.blog.searcher.model.BlogResponse;
 import com.example.blog.searcher.model.BlogSearchRequest;
-import com.example.blog.searcher.model.kakao.DocumentModel;
 import com.example.blog.searcher.model.kakao.KakaoResponseModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpHeaders;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @Component
 @Order(value = 1)
@@ -31,7 +26,10 @@ public class KakaoBlogSearcher implements BlogSearcher{
         Mono<KakaoResponseModel> mono = kakaoWebClient.get()
                 .uri(createQueryString(model))
                 .retrieve()
-                .bodyToMono(KakaoResponseModel.class);
+                .bodyToMono(KakaoResponseModel.class)
+                .doOnError(e -> {
+                    throw new ThirdPartyException(e, ErrorCode.THIRD_PARTY_ERROR);
+                });
         KakaoResponseModel kakaoResponseModel = mono.block();
         log.info(kakaoResponseModel.toString());
         return kakaoResponseModel.toBlogResponse();
