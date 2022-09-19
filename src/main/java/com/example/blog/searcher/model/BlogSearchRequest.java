@@ -1,6 +1,7 @@
 package com.example.blog.searcher.model;
 
 import com.example.blog.searcher.domain.Sort;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 public class BlogSearchRequest {
     @NotBlank
     private String keyword;

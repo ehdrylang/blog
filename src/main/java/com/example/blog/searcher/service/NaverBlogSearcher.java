@@ -38,7 +38,6 @@ public class NaverBlogSearcher implements BlogSearcher{
     private String clientSecret;
 
     @Override
-    @Async
     public BlogResponse search(BlogSearchRequest model) {
         String apiURL = createApiUrl(model);
 
@@ -52,8 +51,7 @@ public class NaverBlogSearcher implements BlogSearcher{
         } catch (JsonProcessingException e) {
             throw new BusinessException(e, ErrorCode.FAIL_INTEGRATION);
         }
-        System.out.println(naverResponseModel);
-        return null;
+        return naverResponseModel.toBlogResponse();
     }
 
     private String createApiUrl(BlogSearchRequest model) {
@@ -129,6 +127,6 @@ public class NaverBlogSearcher implements BlogSearcher{
 
     @Override
     public boolean isAvailable() {
-        return false;
+        return true;
     }
 }
