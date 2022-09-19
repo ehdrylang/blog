@@ -5,7 +5,7 @@ import com.example.blog.common.exception.ErrorCode;
 import com.example.blog.searcher.domain.Sort;
 import com.example.blog.searcher.model.BlogResponse;
 import com.example.blog.searcher.model.BlogSearchRequest;
-import com.example.blog.searcher.model.NaverResponseModel;
+import com.example.blog.searcher.model.naver.NaverResponseModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -129,6 +129,6 @@ public class NaverBlogSearcher implements BlogSearcher{
 
     @Override
     public boolean isAvailable() {
-        return true;
+        return false;
     }
 }

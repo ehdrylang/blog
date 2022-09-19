@@ -1,5 +1,6 @@
-package com.example.blog.searcher.model;
+package com.example.blog.searcher.model.naver;
 
+import com.example.blog.searcher.model.BlogModel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

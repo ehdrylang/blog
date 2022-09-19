@@ -21,8 +21,6 @@ public class BlogSearchServiceImpl implements BlogSearchService{
                 .filter(BlogSearcher::isAvailable)
                 .findFirst()
                 .orElseThrow(() -> new NoSearchSystemException(ErrorCode.NO_SEARCH_SYSTEM_EXCEPTION));
-
-
         return blogSearcher.search(model);
     }
 }

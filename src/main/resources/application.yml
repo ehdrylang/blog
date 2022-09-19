@@ -14,4 +14,4 @@ search:
       clientSecret: 'hvfKjy96ka'
     kakao:
       url: 'https://dapi.kakao.com/v2/search/blog'
-      apiKey: 'apiKeyddddd'
+      apiKey: '8db180aba4f66d1b8f80da2054f750e7'
