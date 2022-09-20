@@ -39,7 +39,7 @@ public class KakaoBlogSearcher implements BlogSearcher{
         sb.append("?query=")
                 .append(model.getKeyword())
                 .append("&sort=")
-                .append(model.getSort().name())
+                .append(model.getSort().name().toLowerCase())
                 .append("&page=")
                 .append(model.getPage())
                 .append("&size=")
@@ -54,12 +54,13 @@ public class KakaoBlogSearcher implements BlogSearcher{
 
     @Override
     public Future<BlogResponse> searchAsync(BlogSearchRequest model) {
+        log.info(model+":"+model.getSort());
+        log.info(createQueryString(model));
         CompletableFuture<BlogResponse> future = new CompletableFuture<>();
         Mono<KakaoResponseModel> mono = kakaoWebClient.get()
                 .uri(createQueryString(model))
                 .retrieve()
-                .bodyToMono(KakaoResponseModel.class)
-                .log();
+                .bodyToMono(KakaoResponseModel.class);
         mono.subscribe((res) -> {
             BlogResponse response = res.toBlogResponse();
             future.complete(response);
