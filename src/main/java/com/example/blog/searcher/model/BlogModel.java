@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class BlogModel {
     private String title;
     private String contents;

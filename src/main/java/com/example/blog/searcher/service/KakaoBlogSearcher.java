@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+
 @Component
 @Order(value = 1)
 @RequiredArgsConstructor
@@ -25,9 +28,9 @@ public class KakaoBlogSearcher implements BlogSearcher{
                 .uri(createQueryString(model))
                 .retrieve()
                 .bodyToMono(KakaoResponseModel.class)
-                .doOnError(e -> {
-                    throw new ThirdPartyException(e, ErrorCode.THIRD_PARTY_ERROR);
-                });
+                        .doOnError(e -> {
+                            throw new ThirdPartyException(e, ErrorCode.THIRD_PARTY_ERROR);
+                        });
         KakaoResponseModel kakaoResponseModel = mono.block();
         return kakaoResponseModel.toBlogResponse();
     }
@@ -47,5 +50,22 @@ public class KakaoBlogSearcher implements BlogSearcher{
     @Override
     public boolean isAvailable() {
         return true;
+    }
+
+    @Override
+    public Future<BlogResponse> searchAsync(BlogSearchRequest model) {
+        CompletableFuture<BlogResponse> future = new CompletableFuture<>();
+        Mono<KakaoResponseModel> mono = kakaoWebClient.get()
+                .uri(createQueryString(model))
+                .retrieve()
+                .bodyToMono(KakaoResponseModel.class)
+                .log();
+        mono.subscribe((res) -> {
+            BlogResponse response = res.toBlogResponse();
+            future.complete(response);
+        }, (e) ->  {
+            throw new ThirdPartyException(e, ErrorCode.THIRD_PARTY_ERROR);
+        });
+        return future;
     }
 }

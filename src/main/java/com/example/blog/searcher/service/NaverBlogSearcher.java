@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -22,6 +21,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 @Component
 @Order(value = 2)
@@ -128,5 +129,12 @@ public class NaverBlogSearcher implements BlogSearcher{
     @Override
     public boolean isAvailable() {
         return false;
+    }
+
+    @Override
+    public Future<BlogResponse> searchAsync(BlogSearchRequest model) {
+        CompletableFuture<BlogResponse> future = new CompletableFuture();
+        future.complete(search(model));
+        return future;
     }
 }

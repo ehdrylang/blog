@@ -4,6 +4,7 @@ import com.example.blog.searcher.domain.Sort;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class BlogSearchRequest {
     @NotBlank
     private String keyword;
