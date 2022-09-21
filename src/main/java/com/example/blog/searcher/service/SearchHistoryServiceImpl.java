@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -30,10 +31,22 @@ public class SearchHistoryServiceImpl implements SearchHistoryService, BlogSearc
     @Override
     @Transactional
     public void consume(BlogSearchEvent event) {
-        if (Objects.isNull(event)) {
-            log.error("event id null!!");
-            return;
+        if (!isValid(event)) {
+            throw new IllegalArgumentException("BlogSearchEvent is invalid.");
         }
         save(event.getKeyword(), event.getSearchDate());
+    }
+
+    private boolean isValid(BlogSearchEvent event) {
+        if (Objects.isNull(event)) {
+            return false;
+        }
+        if (!StringUtils.hasText(event.getKeyword())) {
+            return false;
+        }
+        if (Objects.isNull(event.getSearchDate())) {
+            return false;
+        }
+        return true;
     }
 }
