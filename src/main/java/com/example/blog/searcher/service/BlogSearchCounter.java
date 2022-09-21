@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class BlogSearchCounter {
-    private RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     public Double count(String keyword) {
         ZSetOperations<String, String> operations = redisTemplate.opsForZSet();

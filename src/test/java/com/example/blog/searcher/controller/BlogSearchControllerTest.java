@@ -2,6 +2,7 @@ package com.example.blog.searcher.controller;
 
 import com.example.blog.IntegrationTest;
 import com.example.blog.searcher.constant.Constant;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -103,6 +106,18 @@ class BlogSearchControllerTest extends IntegrationTest {
         this.mvc.perform(get("/api/search/blog/keyword"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.keywords.*", hasSize(10)));
+    }
+
+    @Test
+    @DisplayName("키워드 검색을 하면 검색 횟수가 +1 되어야 한다.")
+    public void 키워드검색시_검색횟수_1만큼_증가() throws Exception {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        String keyword = "해";
+        params.add("keyword", "해");
+        this.mvc.perform(get("/api/search/blog").params(params))
+                .andExpect(status().isOk());
+        Double score = operations.score(Constant.SEARCH.name(), keyword);
+        Assertions.assertThat(score).isEqualTo(1.0);
     }
 
 }
