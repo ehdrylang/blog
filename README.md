@@ -2,6 +2,8 @@
 
 # API 명세
 
+## jar 다운로드 링크 : https://github.com/ehdrylang/blog/raw/main/blog-1.0.jar
+
 ## 1. 블로그 검색
 
 ```jsx
