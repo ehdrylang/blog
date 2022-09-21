@@ -22,7 +22,7 @@ import java.util.concurrent.Future;
 public class BlogSearchServiceImpl implements BlogSearchService{
     private final ApplicationEventPublisher publisher;
     private final List<BlogSearcher> blogSearchers;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final BlogSearchCounter blogSearchCounter;
 
     @Override
     public BlogResponse search(BlogSearchRequest model) {
@@ -30,8 +30,7 @@ public class BlogSearchServiceImpl implements BlogSearchService{
         publisher.publishEvent(new BlogSearchEvent(model.getKeyword(), LocalDateTime.now()));
 
         // 검색 횟수 증가
-        ZSetOperations<String, String> operations = redisTemplate.opsForZSet();
-        operations.incrementScore(Constant.SEARCH.name(), model.getKeyword(), 1.0);
+        blogSearchCounter.count(model.getKeyword());
 
         // 검색 서비스에 요청
         BlogSearcher blogSearcher = blogSearchers.stream()
