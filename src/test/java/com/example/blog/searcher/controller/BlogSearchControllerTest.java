@@ -120,4 +120,20 @@ class BlogSearchControllerTest extends IntegrationTest {
         Assertions.assertThat(score).isEqualTo(1.0);
     }
 
+    @Test
+    @DisplayName("키워드 검색을 3번 하면 검색 횟수가 +3 되어야 한다.")
+    public void 키워드검색을_3회하면_검색횟수_3만큼_증가() throws Exception {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        String keyword = "해";
+        params.add("keyword", "해");
+        this.mvc.perform(get("/api/search/blog").params(params))
+                .andExpect(status().isOk());
+        this.mvc.perform(get("/api/search/blog").params(params))
+                .andExpect(status().isOk());
+        this.mvc.perform(get("/api/search/blog").params(params))
+                .andExpect(status().isOk());
+        Double score = operations.score(Constant.SEARCH.name(), keyword);
+        Assertions.assertThat(score).isEqualTo(3.0);
+    }
+
 }
