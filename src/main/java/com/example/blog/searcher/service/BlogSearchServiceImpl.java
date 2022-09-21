@@ -28,17 +28,15 @@ public class BlogSearchServiceImpl implements BlogSearchService{
     public BlogResponse search(BlogSearchRequest model) {
         // 검색 요청이 발생했다는 이벤트 발생
         publisher.publishEvent(new BlogSearchEvent(model.getKeyword(), LocalDateTime.now()));
-
         // 검색 횟수 증가
         blogSearchCounter.count(model.getKeyword());
-
         // 검색 서비스에 요청
         BlogSearcher blogSearcher = blogSearchers.stream()
                 .filter(BlogSearcher::isAvailable)
                 .findFirst()
                 .orElseThrow(() -> new NoSearchSystemException(ErrorCode.NO_SEARCH_SYSTEM_EXCEPTION));
-        Future<BlogResponse> future = blogSearcher.searchAsync(model);
         try {
+            Future<BlogResponse> future = blogSearcher.searchAsync(model);
             return future.get();
         } catch (Exception e) {
             // 예외 변환
