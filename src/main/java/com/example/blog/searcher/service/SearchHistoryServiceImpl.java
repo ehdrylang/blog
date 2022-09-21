@@ -34,7 +34,6 @@ public class SearchHistoryServiceImpl implements SearchHistoryService, BlogSearc
             log.error("event id null!!");
             return;
         }
-        log.info(event.toString());
         save(event.getKeyword(), event.getSearchDate());
     }
 }

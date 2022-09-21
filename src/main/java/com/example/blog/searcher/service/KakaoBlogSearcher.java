@@ -54,8 +54,6 @@ public class KakaoBlogSearcher implements BlogSearcher{
 
     @Override
     public Future<BlogResponse> searchAsync(BlogSearchRequest model) {
-        log.info(model+":"+model.getSort());
-        log.info(createQueryString(model));
         CompletableFuture<BlogResponse> future = new CompletableFuture<>();
         Mono<KakaoResponseModel> mono = kakaoWebClient.get()
                 .uri(createQueryString(model))

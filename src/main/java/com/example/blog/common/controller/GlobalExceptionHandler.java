@@ -19,11 +19,6 @@ import java.net.BindException;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    /**
-     *  javax.validation.Valid or @Validated 으로 binding error 발생시 발생한다.
-     *  HttpMessageConverter 에서 등록한 HttpMessageConverter binding 못할경우 발생
-     *  주로 @RequestBody, @RequestPart 어노테이션에서 발생
-     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("handleMethodArgumentNotValidException", e);
@@ -31,10 +26,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * @ModelAttribute 으로 binding error 발생시 BindException 발생한다.
-     * ref https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args
-     */
     @ExceptionHandler(BindException.class)
     protected ResponseEntity<ErrorResponse> handleBindException(BindException e) {
         log.error("handleBindException", e);
@@ -42,19 +33,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * @RequestParam 에서 javax.validation.Valid or @Validated 으로 유효성 검사에서 유효하지 않다고 판단되었을 때 발생
-     */
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
         log.error("handleConstraintViolationException", e);
         final ErrorResponse response = ErrorResponse.of(e);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-    /**
-     * enum type 일치하지 않아 binding 못할 경우 발생
-     * 주로 @RequestParam enum으로 binding 못했을 경우 발생
-     */
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         log.error("handleMethodArgumentTypeMismatchException", e);
