@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
-import java.net.BindException;
+import org.springframework.validation.BindException;
 
 @ControllerAdvice
 @Slf4j
